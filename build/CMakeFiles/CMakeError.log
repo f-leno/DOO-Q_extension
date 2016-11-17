@@ -1,0 +1,96 @@
+Determining if the Q_WS_WIN exist failed with the following output:
+Change Dir: /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec1374733323/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1374733323.dir/build.make CMakeFiles/cmTryCompileExec1374733323.dir/build
+make[1]: Entering directory `/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec1374733323.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -std=c++11 -fPIC  -I/home/leno/.conda/envs/leno/include/qt    -o CMakeFiles/cmTryCompileExec1374733323.dir/CheckSymbolExists.cxx.o -c /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
+   return ((int*)(&Q_WS_WIN))[argc];
+                   ^
+make[1]: *** [CMakeFiles/cmTryCompileExec1374733323.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory `/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec1374733323/fast] Error 2
+
+File /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_WIN
+  return ((int*)(&Q_WS_WIN))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_QWS exist failed with the following output:
+Change Dir: /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec144833865/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec144833865.dir/build.make CMakeFiles/cmTryCompileExec144833865.dir/build
+make[1]: Entering directory `/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec144833865.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -std=c++11 -fPIC  -I/home/leno/.conda/envs/leno/include/qt    -o CMakeFiles/cmTryCompileExec144833865.dir/CheckSymbolExists.cxx.o -c /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
+   return ((int*)(&Q_WS_QWS))[argc];
+                   ^
+make[1]: *** [CMakeFiles/cmTryCompileExec144833865.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory `/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec144833865/fast] Error 2
+
+File /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_QWS
+  return ((int*)(&Q_WS_QWS))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_MAC exist failed with the following output:
+Change Dir: /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec744338347/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec744338347.dir/build.make CMakeFiles/cmTryCompileExec744338347.dir/build
+make[1]: Entering directory `/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec744338347.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -std=c++11 -fPIC  -I/home/leno/.conda/envs/leno/include/qt    -o CMakeFiles/cmTryCompileExec744338347.dir/CheckSymbolExists.cxx.o -c /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
+   return ((int*)(&Q_WS_MAC))[argc];
+                   ^
+make[1]: *** [CMakeFiles/cmTryCompileExec744338347.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory `/home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec744338347/fast] Error 2
+
+File /home/leno/gitProjects/DOO-Q_extension/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_MAC
+  return ((int*)(&Q_WS_MAC))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+

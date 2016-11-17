@@ -1,0 +1,2 @@
+/home/leno/gitProjects/DOO-Q_extension/build/soccerwindow2-prefix/src/soccerwindow2-build/CMakeFiles/soccerwindow2_automoc.dir
+/home/leno/gitProjects/DOO-Q_extension/build/soccerwindow2-prefix/src/soccerwindow2-build/CMakeFiles/soccerwindow2.dir
