@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from scipy.interpolate import UnivariateSpline
 from collections import defaultdict
 sns.set(style="darkgrid")
 
@@ -221,8 +222,12 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
             plt.fill_between(X1, Y11, Y12, facecolor='#7570b3', alpha=0.2)
             plt.fill_between(X1, Y11, Y13, facecolor='#7570b3', alpha=0.2)
         if(not significant1 is None):
-           plt.plot(X1,Y11,label=name1, color='#7570b3', linewidth=4.0,markevery=significant1,marker="d",markersize=8)
+           s = UnivariateSpline(X1, Y11)
+           plt.plot(X1,s(X1),label=name1, color='#7570b3', linewidth=4.0,markevery=significant1,marker="d",markersize=8)
+           #plt.plot(X1,Y11,label=name1, color='#7570b3', linewidth=4.0,markevery=significant1,marker="d",markersize=8)
         else:
+            s = UnivariateSpline(X1, Y11)
+           # plt.plot(X1,s(X1),label=name1, color='#7570b3', linewidth=4.0)            
             plt.plot(X1,Y11,label=name1, color='#7570b3', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
@@ -239,6 +244,8 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         if(not significant2 is None):
             plt.plot(X2,Y21,label=name2, color='#e7298a', linewidth=4.0,markevery=significant2,marker="+",markersize=8)
         else:
+            s = UnivariateSpline(X2, Y21)
+           # plt.plot(X2,s(X2),label=name2, color='#e7298a', linewidth=4.0)  
             plt.plot(X2,Y21,label=name2, color='#e7298a', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
@@ -255,6 +262,8 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         if(not significant3 is None):
             plt.plot(X3,Y31,label=name3, color='#66a61e', linewidth=4.0,marker="o",markevery=significant3,markersize=8)
         else:
+            s = UnivariateSpline(X3, Y31)
+            #plt.plot(X3,s(X3),label=name3, color='#66a61e', linewidth=4.0)  
             plt.plot(X3,Y31,label=name3, color='#66a61e', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
@@ -271,6 +280,8 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         if(not significant4 is None):
             plt.plot(X4,Y41,label=name4, color='#e6ab02', linewidth=4.0,markevery=significant4,marker="H",markersize=8)
         else:
+            #s = UnivariateSpline(X4, Y41,s=10)
+            #plt.plot(X4,s(X4),label=name4, color='#e6ab02', linewidth=4.0)  
             plt.plot(X4,Y41,label=name4, color='#e6ab02', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
@@ -287,6 +298,8 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         if(not significant5 is None):
             plt.plot(X5,Y51,label=name5, color='black', linewidth=4.0,markevery=significant5,marker="x",markersize=8)
         else:
+            s = UnivariateSpline(X5, Y51)
+            #plt.plot(X5,s(X5),label=name5, color='black', linewidth=4.0)
             plt.plot(X5,Y51,label=name5, color='black', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
@@ -318,7 +331,7 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         plt.ylabel('Time to Goal', fontsize=20, fontweight='bold')
     elif what == "__SUMMARY_budgets":
         #plt.title('Used Budget per Trial')
-        plt.ylabel('Budget', fontsize=20, fontweight='bold')
+        plt.ylabel('Q-table Entries', fontsize=20, fontweight='bold')
     elif what == "__SUMMARY_stepscaptured":
         #plt.title('Used Budget per Trial')
         plt.ylabel('Steps until captured', fontsize=20, fontweight='bold')

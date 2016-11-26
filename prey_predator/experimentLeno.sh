@@ -1,10 +1,11 @@
-pkill -f  sh\ ru* 
-pkill -f python\ exp*
-pkill -f python\ /home/leno/DOO*
-killall -9 rcssserver
+sh stopAll.sh
 
-sh runSimpleExpServer.sh 22445 50 &
-sleep 5
-sh runSimpleExpAgent.sh 22445 SAQL 1 50 &
+python experiment.py -a Dummy -it 1 -et 1000 -n 3 -t 1000 -p 1 &
+python experiment.py -a SAQL -it 1 -et 1000 -n 3 -t 1000 -p 1 &
+python experiment.py -a MAQL -it 1 -et 1000 -n 3 -t 1000 -p 1 &
+python experiment.py -a DQL -it 1 -et 500 -n 3 -t 1000 -p 1 &
+python experiment.py -a DQL -it 1 -et 1000 -n 3 -t 1000 -p 1 &
+python experiment.py -a DOOQ -it 1 -et 500 -n 3 -t 1000 -p 1 &
+python experiment.py -a DOOQ -it 1 -et 1000 -n 3 -t 1000 -p 1 &
 
 

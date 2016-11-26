@@ -25,7 +25,7 @@ class DOOQ(Agent):
     
 
     def __init__(self, seed=12345,numAg = 3,gamma=0.9,T=0.4):
-        self.sortFriends = True
+        self.sortFriends = None
         self.gamma = gamma
         self.T = T
         self.functions = Agent_Utilities()
@@ -40,6 +40,7 @@ class DOOQ(Agent):
         agents = []
         for i in range(numAg):        
             agents.append(copy.deepcopy(self))
+            agents[i].sortFriends = True
       
         
         return agents

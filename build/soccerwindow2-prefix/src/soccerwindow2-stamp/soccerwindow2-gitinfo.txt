@@ -1,3 +1,0 @@
-repository='https://github.com/mhauskn/soccerwindow2.git'
-module=''
-tag=''

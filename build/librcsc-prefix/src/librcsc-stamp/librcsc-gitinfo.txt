@@ -1,3 +1,0 @@
-repository='https://github.com/mhauskn/librcsc.git'
-module=''
-tag=''

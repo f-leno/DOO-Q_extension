@@ -1,3 +1,0 @@
-repository='https://github.com/mhauskn/rcssserver.git'
-module=''
-tag=''

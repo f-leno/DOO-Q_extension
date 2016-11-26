@@ -23,6 +23,8 @@ class PredatorPreyEnvironment(object):
     capturedReward = +1
     defaultReward = 0  
     
+    outGridValue = None
+    
     
     
     agentVisualDepth = 3
@@ -31,10 +33,12 @@ class PredatorPreyEnvironment(object):
     lastTerminal = False
     
     numberAgents = None
+    numberPreys = None
     agents = None
     
     agentPositions = None
     preyPositions = None
+    caught = None
     
     #Agent class objects
     agents = None
@@ -48,7 +52,7 @@ class PredatorPreyEnvironment(object):
     #Controls the state transition (for agents running in parallel)
     completedTransition = None
     
-    def __init__(self,numberAgents,agents,evalEpisodes):
+    def __init__(self,numberAgents,agents,preys,evalEpisodes):
         """Prepares the environment class:
             numberAgents = the number of agents in the simulation
             agents = the agents objects (subclass of Agent)
@@ -56,15 +60,18 @@ class PredatorPreyEnvironment(object):
             parallelAgents = if the agents are running in parallel
         """
         self.numberAgents = numberAgents
+        self.numberPreys = preys
         self.agents = agents
            
         self.agentActions = [None]*numberAgents
         
         self.agentPositions = [None]*numberAgents
         self.storedInitialPositions = [None]*evalEpisodes
-        self.preyPositions = [None]
+        self.preyPositions = [None]*preys
+        self.caught = [None]*preys
         
         self.build_eval_eps(evalEpisodes)
+        self.outGridValue = -99
 
         
     def act(self,agentID,action):
@@ -92,36 +99,46 @@ class PredatorPreyEnvironment(object):
         
     def state_transition(self):
         """Executes the state transition"""
-        #Process the prey movement
-        preyMove = random.randint(0,actions.preyActions-1)
-        offsetX = 0
-        offsetY = 0
-        if  (preyMove == actions.NORTH):
-            offsetX = 0
-            offsetY = 1
-        elif(preyMove == actions.SOUTH):
-            offsetX = 0
-            offsetY = -1           
-        elif(preyMove == actions.EAST):
-            offsetX = 1
-            offsetY = 0 
-        elif(preyMove == actions.WEST):
-            offsetX = -1
-            offsetY = 0
-            
-        self.preyPositions[0] = self.preyPositions[0] + offsetX
-        self.preyPositions[1] = self.preyPositions[1] + offsetY
+        preyIndex = 0        
         
-        #movements towards walls
-        if(self.preyPositions[0] <= 0):
-            self.preyPositions[0] = 1
-        elif(self.preyPositions[0] > self.sizeX):
-            self.preyPositions[0] = self.sizeX
-            
-        if(self.preyPositions[1] <= 0):
-            self.preyPositions[1] = 1
-        elif(self.preyPositions[1] > self.sizeY):
-            self.preyPositions[1] = self.sizeY
+        #Process the prey movement
+        for preyP in self.preyPositions:
+            #No need to move a captured prey            
+            if self.caught[preyIndex]:
+                if preyP[0] != self.outGridValue:
+                    self.preyPositions[preyIndex][0] = self.outGridValue
+                    self.preyPositions[preyIndex][1] = self.outGridValue
+            else: #The prey was not captured yet        
+                preyMove = random.randint(0,actions.preyActions-1)
+                offsetX = 0
+                offsetY = 0
+                if  (preyMove == actions.NORTH):
+                    offsetX = 0
+                    offsetY = 1
+                elif(preyMove == actions.SOUTH):
+                    offsetX = 0
+                    offsetY = -1           
+                elif(preyMove == actions.EAST):
+                    offsetX = 1
+                    offsetY = 0 
+                elif(preyMove == actions.WEST):
+                    offsetX = -1
+                    offsetY = 0
+                    
+                self.preyPositions[preyIndex][0] = self.preyPositions[preyIndex][0] + offsetX
+                self.preyPositions[preyIndex][1] = self.preyPositions[preyIndex][1] + offsetY
+                
+                #movements towards walls
+                if(self.preyPositions[preyIndex][0] <= 0):
+                    self.preyPositions[preyIndex][0] = 1
+                elif(self.preyPositions[preyIndex][0] > self.sizeX):
+                    self.preyPositions[preyIndex][0] = self.sizeX
+                    
+                if(self.preyPositions[preyIndex][1] <= 0):
+                    self.preyPositions[preyIndex][1] = 1
+                elif(self.preyPositions[preyIndex][1] > self.sizeY):
+                    self.preyPositions[preyIndex][1] = self.sizeY
+            preyIndex += 1
         
         # Move all agents
         agentIndex = 0
@@ -156,22 +173,33 @@ class PredatorPreyEnvironment(object):
             agentIndex += 1
         #Updates the terminal state variable
         self.check_terminal()
-        if(self.lastTerminal):
-            self.reward = self.capturedReward
-        else:
+        if self.reward == 0:
             self.reward = self.defaultReward
+
 
             
     def check_terminal(self):
         """Checks if the current state is terminal"""
-        caught = False
-        agentIndex = 0
-        while not caught and agentIndex < self.numberAgents:
-            if(self.preyPositions[0] == self.agentPositions[agentIndex][0] and
-               self.preyPositions[1] == self.agentPositions[agentIndex][1]):
-                   caught = True
-            agentIndex += 1
-        self.lastTerminal = caught
+        self.reward = 0        
+        preyIndex = 0
+        
+        for preyP in self.preyPositions:
+            if not self.caught[preyIndex]:            
+                agentIndex = 0
+                while not self.caught[preyIndex] and agentIndex < self.numberAgents:
+                    if(preyP[0] == self.agentPositions[agentIndex][0] and
+                    preyP[1] == self.agentPositions[agentIndex][1]):
+                       self.reward += self.capturedReward
+                       self.caught[preyIndex] = True
+                    agentIndex += 1
+                
+            self.lastTerminal = self.caught[preyIndex]
+            if not self.caught[preyIndex]:
+                return False
+            preyIndex += 1
+
+                 
+            
         
         
     def get_state(self,agentID,sortFriends=True):
@@ -188,19 +216,44 @@ class PredatorPreyEnvironment(object):
         selfP = self.agentPositions[agentID]
         selfx = selfP[0]
         selfy = selfP[1]
+        
+        sensations = []
+        
+        preys = self.preyPositions
+        
+        if sortFriends:
+            sortedPreys = sorted(preys,key=lambda i: distance.euclidean(i,selfP))
+        else:
+            sortedPreys = preys
+        notFoundPreys = 0
+        #preyx = self.preyPositions[0]        
+        #preyy = self.preyPositions[1]
+        for i in range(self.numberPreys):
+            preyx = sortedPreys[i][0]
+            preyy = sortedPreys[i][1]
+            
+            #sensations related to the prey
+            offsetX = preyx - selfx
+            offsetY = preyy - selfy
+            
+            if(math.fabs(offsetX)<= self.agentVisualDepth and math.fabs(offsetY)<= self.agentVisualDepth):
+                 sensations.append(offsetX)
+                 sensations.append(offsetY)
+            else:
+                if sortFriends:
+                    notFoundPreys +=1
+                else:
+                 sensations.append(float('inf'))
+                 sensations.append(float('inf'))
+        if sortFriends:
+            for i in range(notFoundPreys):
+                sensations.append(float('inf'))
+                sensations.append(float('inf'))
+                
 
-        preyx = self.preyPositions[0]        
-        preyy = self.preyPositions[1]
-        #sensations related to the prey
-        offsetX = preyx - selfx
-        offsetY = preyy - selfy
-        
-        preySensation = [float('inf'),float('inf')]
-        #If the prey is inside the visualDepth
-        if(math.fabs(offsetX)<= self.agentVisualDepth and math.fabs(offsetY)<= self.agentVisualDepth):
-            preySensation =[offsetX,offsetY]
-        
-        sensations = preySensation
+
+        #End of prey sensations
+
         #sensations related to other agents
         otherAg = [x for i,x in enumerate(self.agentPositions) if i!=agentID]
         
@@ -228,6 +281,7 @@ class PredatorPreyEnvironment(object):
         
         
         sensations = tuple(sensations)
+        
         return sensations
              
         
@@ -250,7 +304,16 @@ class PredatorPreyEnvironment(object):
         self.load_episode(epInfo)
         #Prepares pointer for the next episode
         self.lastEvalEps = (self.lastEvalEps + 1) % len(self.storedInitialPositions)
+        #Preys in random position
+        notChosen = range(len(self.preyPositions))
+
+        preyPosic = []        
+        while len(notChosen) != 0:
+            index = random.choice(notChosen)
+            preyPosic.append(self.preyPositions[index])
+            notChosen.remove(index)
         
+        self.preyPositions = preyPosic
         
         #Agents in random position
         notChosen = range(len(self.agentPositions))
@@ -263,7 +326,10 @@ class PredatorPreyEnvironment(object):
         
         self.agentPositions = agPosic
         
+        self.caught = [False]*self.numberPreys        
+        
         random.setstate(randomState)
+        
             
                 
         
@@ -274,6 +340,7 @@ class PredatorPreyEnvironment(object):
         epInfo = self.generate_episode_information()
         #epInfo = random.choice(self.storedInitialPositions) # ---
         self.load_episode(epInfo)
+        self.caught = [False]*self.numberPreys
           
 
         
@@ -293,24 +360,35 @@ class PredatorPreyEnvironment(object):
             
     def generate_episode_information(self):
         """Generates a random Episode"""
-        xprey = random.randint(1,self.sizeX)
-        yprey = random.randint(1,self.sizeY)
-        #Prey random initial Position        
-        preyP = [xprey,yprey]
+        
+        allPreysPos = []
+        for i in range(self.numberPreys):
+            xprey = random.randint(1,self.sizeX)
+            yprey = random.randint(1,self.sizeY)
+            #Prey random initial Position        
+            preyP = [xprey,yprey]
+            allPreysPos.append(preyP)
+        
         
         allAgentsP = []
         #Agents random initial position
         for i in range(self.numberAgents):
-            xagent = random.randint(1,self.sizeX)
-            yagent = random.randint(1,self.sizeY)
             #No terminal state is generated
-            while xagent == xprey and yagent == yprey:
+            repeat = True
+            while repeat:
+                repeat = False
+                index = 0
                 xagent = random.randint(1,self.sizeX)
                 yagent = random.randint(1,self.sizeY)
+                while not repeat and index<self.numberPreys:
+                    if allPreysPos[index][0]==xagent and \
+                        allPreysPos[index][1]==yagent:
+                            repeat = True
+                    index = index+1
             agentP = [xagent,yagent]
             allAgentsP.append(agentP)
 
-        return [preyP,allAgentsP]
+        return [allPreysPos,allAgentsP]
             
         
             

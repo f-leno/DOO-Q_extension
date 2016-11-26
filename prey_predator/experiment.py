@@ -23,8 +23,9 @@ from environment import PredatorPreyEnvironment
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n','--number_agents',type=int, default=3)
+    parser.add_argument('-p','--number_preys',type=int, default=1)
     parser.add_argument('-a','--agent',  default='Dummy') #Here, one agent class controls everything
-    parser.add_argument('-t','--learning_trials',type=int, default=1000)
+    parser.add_argument('-t','--learning_trials',type=int, default=1500)
     parser.add_argument('-i','--evaluation_interval',type=int, default=5)
     parser.add_argument('-d','--evaluation_duration',type=int, default=100)
     parser.add_argument('-s','--seed',type=int, default=12345)
@@ -88,7 +89,8 @@ def main():
         random.seed(parameter.seed)
         
         
-        environment = PredatorPreyEnvironment(numberAgents = parameter.number_agents,agents = agents, evalEpisodes = parameter.evaluation_duration)    
+        environment = PredatorPreyEnvironment(numberAgents = parameter.number_agents,agents = agents,
+                                              preys=parameter.number_preys, evalEpisodes = parameter.evaluation_duration)    
         
         for i in range(parameter.number_agents):
              agents[i].connectEnv(environment,i)   
