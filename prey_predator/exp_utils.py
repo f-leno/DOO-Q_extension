@@ -160,7 +160,7 @@ def collect_experiment_data(source='/', runs=1, servers=1, agents=3,hfo=True):
             csvfile.flush()
     
 
-def summarize_data(data, confidence=0.9):
+def summarize_data(data, confidence=0.99):
     n = len(data)
     m = np.mean(data,axis=0)
     se = scipy.stats.sem(data,axis=0)
@@ -275,14 +275,14 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         X4 = summary4Content[0]
         Y41, Y42, Y43 = summary4Content[1],summary4Content[2],summary4Content[3]
         if what != "__SUMMARY_budgets" and ci:
-            plt.fill_between(X4, Y41, Y42, facecolor='#e6ab02', alpha=0.2)
-            plt.fill_between(X4, Y41, Y43, facecolor='#e6ab02', alpha=0.2)
+            plt.fill_between(X4, Y41, Y42, facecolor='black', alpha=0.2)
+            plt.fill_between(X4, Y41, Y43, facecolor='black', alpha=0.2)
         if(not significant4 is None):
-            plt.plot(X4,Y41,label=name4, color='#e6ab02', linewidth=4.0,markevery=significant4,marker="H",markersize=8)
+            plt.plot(X4,Y41,label=name4, color='black', linewidth=4.0,markevery=significant4,marker="H",markersize=8)
         else:
             #s = UnivariateSpline(X4, Y41,s=10)
             #plt.plot(X4,s(X4),label=name4, color='#e6ab02', linewidth=4.0)  
-            plt.plot(X4,Y41,label=name4, color='#e6ab02', linewidth=4.0)
+            plt.plot(X4,Y41,label=name4, color='black', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
         if not xMin is None:
@@ -293,14 +293,14 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         X5 = summary5Content[0]
         Y51, Y52, Y53 = summary5Content[1],summary5Content[2],summary5Content[3]
         if what != "__SUMMARY_budgets" and ci:
-            plt.fill_between(X5, Y51, Y52, facecolor='black', alpha=0.2)
-            plt.fill_between(X5, Y51, Y53, facecolor='black', alpha=0.2)
+            plt.fill_between(X5, Y51, Y52, facecolor='#e6ab02', alpha=0.2)
+            plt.fill_between(X5, Y51, Y53, facecolor='#e6ab02', alpha=0.2)
         if(not significant5 is None):
-            plt.plot(X5,Y51,label=name5, color='black', linewidth=4.0,markevery=significant5,marker="x",markersize=8)
+            plt.plot(X5,Y51,label=name5, color='#e6ab02', linewidth=4.0,markevery=significant5,marker="x",markersize=8)
         else:
             s = UnivariateSpline(X5, Y51)
             #plt.plot(X5,s(X5),label=name5, color='black', linewidth=4.0)
-            plt.plot(X5,Y51,label=name5, color='black', linewidth=4.0)
+            plt.plot(X5,Y51,label=name5, color='#e6ab02', linewidth=4.0)
         if not yMin is None:
             plt.ylim([yMin,yMax])
         if not xMin is None:
