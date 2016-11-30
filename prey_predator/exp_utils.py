@@ -340,7 +340,7 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         plt.ylabel('Unknown')
 
     plt.xlabel('Training Episodes', fontsize=20, fontweight='bold')
-    plt.legend(loc='best',prop={'size':18, 'weight':'bold'})#,ncol=6)
+    plt.legend(loc='best',prop={'size':18, 'weight':'bold'})#,ncol=5)
     plt.tick_params(axis='both', which='major', labelsize=18)
     plt.show()
 
