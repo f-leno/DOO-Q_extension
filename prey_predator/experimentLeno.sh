@@ -1,15 +1,20 @@
 sh stopAll.sh
 
-#python experiment.py -a Dummy -it 842 -et 1000 -n 3 -t 1000 -p 1 &
-#python experiment.py -a SAQL -it 515 -et 750 -n 3 -t 1000 -p 1 &
-#python experiment.py -a SAQL -it 837 -et 1000 -n 3 -t 1000 -p 1 &
-python experiment.py -a MAQL -it 840 -et 842 -n 3 -t 1000 -p 1 &
-python experiment.py -a MAQL -it 843 -et 845 -n 3 -t 1000 -p 1 &
-python experiment.py -a MAQL -it 846 -et 848 -n 3 -t 1000 -p 1 &
-python experiment.py -a MAQL -it 849 -et 850 -n 3 -t 1000 -p 1 &
-#python experiment.py -a DQL -it 1 -et 500 -n 3 -t 1000 -p 1 &
-#python experiment.py -a DQL -it 1 -et 1000 -n 3 -t 1000 -p 1 &
-#python experiment.py -a DOOQ -it 994 -et 1000 -n 3 -t 1000 -p 1 &
-#python experiment.py -a DOOQ -it 827 -et 850 -n 3 -t 1000 -p 1 &
+#python experiment.py -a SAQL -it 126 -et 250 -n 3 -t 1500 -p 2 &
+#python experiment.py -a SAQL -it 1 -et 125 -n 3 -t 1500 -p 2 &
+#python experiment.py -a MAQL -it 169 -et 250 -n 3 -t 1500 -p 2 &
+#python experiment.py -a MAQL -it 85 -et 168 -n 3 -t 1500 -p 2 &
+#python experiment.py -a MAQL -it 1 -et 84 -n 3 -t 1500 -p 2 &
+#python experiment.py -a DQL -it 1 -et 250 -n 3 -t 1500 -p 2 &
+#python experiment.py -a DOOQ -it 1 -et 250 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 1 -et 32 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 33 -et 64 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 65 -et 97 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 98 -et 130 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 131 -et 163 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 163 -et 195 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 196 -et 229 -n 3 -t 1500 -p 2 &
+python experiment.py -a Dummy -it 230 -et 250 -n 3 -t 1500 -p 2 &
+
 
 

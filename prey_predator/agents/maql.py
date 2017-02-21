@@ -119,7 +119,7 @@ class MAQL(Agent):
         else:
             prob = random.random()
             if prob <= 0.1:
-                return random.choice(allActions)
+                return random.choice(allActions)[self.agentIndex]
             return self.max_Q_action(state)
            
 

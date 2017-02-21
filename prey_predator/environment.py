@@ -8,6 +8,7 @@ Environment for the predator-prey domain
 import random 
 import math
 from scipy.spatial import distance
+
 import time
 import actions
 
@@ -16,18 +17,19 @@ class PredatorPreyEnvironment(object):
     sizeX = 10
     sizeY = 10
     
-    
-        
+
     
     #Default Environment Rewards
-    capturedReward = +1
-    defaultReward = 0  
+    capturedReward = None
+    defaultReward = None  
+    
+    rewardType = None
     
     outGridValue = None
     
+    invertedAction = None
     
-    
-    agentVisualDepth = 3
+    agentVisualDepth = None
     
     reward = None
     lastTerminal = False
@@ -39,9 +41,12 @@ class PredatorPreyEnvironment(object):
     agentPositions = None
     preyPositions = None
     caught = None
+
     
     #Agent class objects
     agents = None
+    
+    changeTransition = None
     
 
     storedInitialPositions = None
@@ -52,18 +57,33 @@ class PredatorPreyEnvironment(object):
     #Controls the state transition (for agents running in parallel)
     completedTransition = None
     
-    def __init__(self,numberAgents,agents,preys,evalEpisodes):
+    def __init__(self,numberAgents,agents,preys,evalEpisodes,depth, rewardType,invertedAction,changeTransition):
         """Prepares the environment class:
             numberAgents = the number of agents in the simulation
             agents = the agents objects (subclass of Agent)
             evalEpisodes = the number of evaluation episodes
-            parallelAgents = if the agents are running in parallel
+            depth = the visual depth
+            rewardType = 1 - reward only when prey is captured, 2 - reward proportional to distance
+            invertedAction = inverts the effect of actions
+            changeTransition = change the transition function to change agent movements
         """
         self.numberAgents = numberAgents
         self.numberPreys = preys
         self.agents = agents
+        self.agentVisualDepth = depth
+        self.rewardType = rewardType
+        
+        if rewardType == 1:
+            self.capturedReward = 1
+            self.defaultReward = 0
+        else:
+            self.capturedReward = 100
+            self.defaultReward = 0
+        self.invertedAction = invertedAction
+        self.changeTransition = changeTransition
            
         self.agentActions = [None]*numberAgents
+        self.reward = [None]*numberAgents
         
         self.agentPositions = [None]*numberAgents
         self.storedInitialPositions = [None]*evalEpisodes
@@ -72,6 +92,8 @@ class PredatorPreyEnvironment(object):
         
         self.build_eval_eps(evalEpisodes)
         self.outGridValue = -99
+        
+
 
         
     def act(self,agentID,action):
@@ -145,18 +167,8 @@ class PredatorPreyEnvironment(object):
         for agentP in self.agentPositions:
             agtMove = self.agentActions[agentIndex]
             
-            if  (agtMove == actions.NORTH):
-                offsetX = 0
-                offsetY = 1
-            elif(agtMove == actions.SOUTH):
-                offsetX = 0
-                offsetY = -1           
-            elif(agtMove == actions.EAST):
-                offsetX = 1
-                offsetY = 0 
-            elif(agtMove == actions.WEST):
-                offsetX = -1
-                offsetY = 0
+            offsetX,offsetY = self.getAgentOffset(agtMove) 
+
             self.agentPositions[agentIndex][0] = self.agentPositions[agentIndex][0] + offsetX
             self.agentPositions[agentIndex][1] = self.agentPositions[agentIndex][1] + offsetY
             
@@ -173,14 +185,52 @@ class PredatorPreyEnvironment(object):
             agentIndex += 1
         #Updates the terminal state variable
         self.check_terminal()
-        if self.reward == 0:
-            self.reward = self.defaultReward
-
+        
+        #Updating captured prey
+        for i in range(self.numberPreys): 
+            if self.caught[i]:
+                if self.preyPositions[i][0] != self.outGridValue:
+                    self.preyPositions[i][0] = self.outGridValue
+                    self.preyPositions[i][1] = self.outGridValue
+        
+        for i in range(self.numberAgents):        
+            if self.reward[i] == 0:
+                if self.rewardType == 1:
+                    self.reward[i] = self.defaultReward
+                else:
+                    self.reward[i] = self.nearestPreyReward(i)
+                
+    def nearestPreyReward(self,agentIndex):
+        """Calculates a reward based on the distance of the nearest prey"""
+        selfP = self.agentPositions[agentIndex]   
+        dist = distance.euclidean(selfP,min(self.preyPositions,key=lambda i: distance.euclidean(i,selfP)))
+        rew = math.sqrt(self.capturedReward) / dist
+        return rew
+        
+    def getAgentOffset(self,agtMove):
+        """Returns the effect of agent actions (takes into account the inverted action parameter)"""
+        if  (agtMove == actions.NORTH):                       
+             offsetX = 0 if not self.changeTransition else 1             
+             offsetY = 1 if not self.invertedAction else -1
+        elif(agtMove == actions.SOUTH):
+             offsetX = 0 if not self.changeTransition else -1
+             offsetY = -1 if not self.invertedAction else 1          
+        elif(agtMove == actions.EAST):
+             offsetX = 1 if not self.invertedAction else -1
+             offsetY = 0 if not self.changeTransition else -1 
+        elif(agtMove == actions.WEST):
+             offsetX = -1 if not self.invertedAction else 1
+             offsetY = 0 if not self.changeTransition else 1
+        
+        return offsetX,offsetY
+        
 
             
     def check_terminal(self):
         """Checks if the current state is terminal"""
-        self.reward = 0        
+        allCaught = True
+        for i in range(self.numberAgents):        
+            self.reward[i] = 0        
         preyIndex = 0
         
         for preyP in self.preyPositions:
@@ -189,14 +239,19 @@ class PredatorPreyEnvironment(object):
                 while not self.caught[preyIndex] and agentIndex < self.numberAgents:
                     if(preyP[0] == self.agentPositions[agentIndex][0] and
                     preyP[1] == self.agentPositions[agentIndex][1]):
-                       self.reward += self.capturedReward
+                       for i in range(self.numberAgents):        
+                           self.reward[i] += self.capturedReward
                        self.caught[preyIndex] = True
+                    else:
+                       allCaught = False                        
                     agentIndex += 1
-                
-            self.lastTerminal = self.caught[preyIndex]
-            if not self.caught[preyIndex]:
-                return False
             preyIndex += 1
+            
+                
+                
+        self.lastTerminal = allCaught
+        return allCaught
+            
 
                  
             
@@ -290,7 +345,7 @@ class PredatorPreyEnvironment(object):
         
     def observe_reward(self,agentID):
         """Returns the reward for the agent"""
-        return self.reward
+        return self.reward[agentID]
         
     def is_terminal_state(self):
         return self.lastTerminal
@@ -299,8 +354,8 @@ class PredatorPreyEnvironment(object):
         """Start next evaluation episode"""
         randomState = random.getstate()
         
-            
-        epInfo = self.storedInitialPositions[self.lastEvalEps]
+        import copy
+        epInfo = copy.deepcopy(self.storedInitialPositions[self.lastEvalEps])
         self.load_episode(epInfo)
         #Prepares pointer for the next episode
         self.lastEvalEps = (self.lastEvalEps + 1) % len(self.storedInitialPositions)
@@ -348,7 +403,7 @@ class PredatorPreyEnvironment(object):
         """Starts an episode geerated by the generate_episode_information() method"""
         self.preyPositions = episodeInfo[0]
         self.agentPositions = episodeInfo[1]
-        self.reward = None #No last step reward
+        self.reward = [None]*self.numberAgents #No last step reward
         self.lastTerminal = False
         
     def build_eval_eps(self,numEps):

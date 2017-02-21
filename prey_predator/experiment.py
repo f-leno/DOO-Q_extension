@@ -10,6 +10,7 @@ import sys
 import csv
 import random
 from environment import PredatorPreyEnvironment
+import os
 
 #from cmac import CMAC
 
@@ -90,7 +91,9 @@ def main():
         
         
         environment = PredatorPreyEnvironment(numberAgents = parameter.number_agents,agents = agents,
-                                              preys=parameter.number_preys, evalEpisodes = parameter.evaluation_duration)    
+                                              preys=parameter.number_preys, evalEpisodes = parameter.evaluation_duration,depth=3,rewardType=1,invertedAction=False,
+                                              changeTransition=False)  
+                                              
         
         for i in range(parameter.number_agents):
              agents[i].connectEnv(environment,i)   
@@ -103,7 +106,10 @@ def main():
         eval_csv_writers = [None]*len(agents)
         eval_csv_files = [None]*len(agents)
         for i in range(len(agents)):
-            logFolder = parameter.log_file + getattr(parameter,"agent")+"/_0_"+str(trial)+"_AGENT_"+str(i+1)+"_RESULTS"
+            logFolder = parameter.log_file + getattr(parameter,"agent")
+            if not os.path.exists(logFolder):
+                os.makedirs(logFolder)
+            logFolder += "/_0_"+str(trial)+"_AGENT_"+str(i+1)+"_RESULTS"
             train_csv_files[i] = open(logFolder + "_train", "wb")
             train_csv_writers[i] = csv.writer(train_csv_files[i])
             train_csv_writers[i].writerow(("trial","steps_captured","used_budget"))
