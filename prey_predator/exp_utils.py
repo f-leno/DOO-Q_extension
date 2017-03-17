@@ -213,6 +213,8 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
                xMin = None, xMax = None, yMin=None, yMax=None
                ):
     plt.figure(figsize=(20,6), dpi=300)
+    plt.gca().set_axis_bgcolor('white')
+    plt.grid(True,color='0.8')
     if source1 != None:
         summary1File = os.path.join(source1, what)
         summary1Content = np.loadtxt(open(summary1File, "rb"), skiprows=1, delimiter=",", unpack=True)
@@ -334,7 +336,7 @@ def draw_graph(source1 = None, name1 = "Algo1", significant1=None,
         plt.ylabel('Q-table Entries', fontsize=20, fontweight='bold')
     elif what == "__SUMMARY_stepscaptured":
         #plt.title('Used Budget per Trial')
-        plt.ylabel('Steps until captured', fontsize=20, fontweight='bold')
+        plt.ylabel('Steps until capture', fontsize=20, fontweight='bold')
     else:
         #plt.title('Unknown')
         plt.ylabel('Unknown')
