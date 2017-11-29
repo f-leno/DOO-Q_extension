@@ -48,7 +48,7 @@ repetitions = 250;
 initTrial = 1;
 endTrial = repetitions; 
 useMarkers = false;
-convert_preyPredator(folderCSV,repetitions,useMarkers); %may take a long time to run
+convert_preyPredator(folderCSV,repetitions,3); %may take a long time to run
 generateGraphFromBurlapFile(folderCSV, initTrial, endTrial,useMarkers);
 ```
 
