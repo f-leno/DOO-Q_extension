@@ -42,7 +42,8 @@ generateGraphFromBurlapFile(folderCSV, initTrial, endTrial,useMarkers);
 <b>Predator-Prey</b>
 
 ```matlab
-folderCSV = %<path for prey-predator_original folder>
+folderOriginal = %<path for prey-predator_original folder>
+folderCSV = %<path for prey-predator_original folder ommiting '_original'>
 repetitions = 250;
 initTrial = 1;
 endTrial = repetitions; 
