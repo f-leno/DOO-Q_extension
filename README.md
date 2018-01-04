@@ -1,5 +1,5 @@
 # MOO-MDP: An Object-Oriented Representation for Cooperative Multiagent Reinforcement Learning
-This is the codification used in the <i>IEEE Transactions on Cybernetics</i> paper proposing the Multiagent Object-Oriented approach. You are free to use all or part of the codes here presented for any purpose, provided that the paper is properly cited and the original authors properly credited. All the files here shared come with no warranties.
+This is the codification used in the <i>IEEE Transactions on Cybernetics</i> <a href=http://ieeexplore.ieee.org/document/8241448/>paper</a> proposing the Multiagent Object-Oriented approach. You are free to use all or part of the codes here presented for any purpose, provided that the paper is properly cited and the original authors properly credited. All the files here shared come with no warranties.
 
 Paper bib entry: <br><br>
 <i>
@@ -14,7 +14,7 @@ Paper bib entry: <br><br>
   number={99}, <br>
   pages={1-13}, <br>
   doi={10.1109/TCYB.2017.2781130}, <br>
-  ISSN={2168-2267}, <br>
+  ISSN={2168-2267} <br>
  }
   </i>
  <br><br>
