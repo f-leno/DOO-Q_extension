@@ -9,9 +9,12 @@ Paper bib entry: <br><br>
                Anna Helena Reali Costa},<br>
   title     = {{MOO-MDP: An Object-Oriented Representation for Cooperative Multiagent Reinforcement Learning}},<br>
   journal   = {IEEE Transactions on Cybernetics}, <br>
-  pages     = {},<br>
-  year      = {2018},<br>
-  doi={xxxx}<br>
+  year={2017}, <br> 
+  volume={PP}, <br>
+  number={99}, <br>
+  pages={1-13}, <br>
+  doi={10.1109/TCYB.2017.2781130}, <br>
+  ISSN={2168-2267}, <br>
  }
   </i>
  <br><br>
